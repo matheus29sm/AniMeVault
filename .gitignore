@@ -44,5 +44,8 @@ Thumbs.db
 *.tar
 .env
 
-### Arquivos temporários ###
+### Temporary files ###
 *.tmp
+
+### Spring Boot local configs ###
+application-local.properties
