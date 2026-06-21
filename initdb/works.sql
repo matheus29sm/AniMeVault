@@ -8,7 +8,7 @@ CREATE TYPE notes_status AS ENUM ('FINISHED', 'READING', 'NOT_READING', 'AUTHOR_
 CREATE TABLE works (
     id SERIAL PRIMARY KEY,
     rank INT,
-    titulo VARCHAR(200) NOT NULL,
+    title VARCHAR(200) NOT NULL,
     anime_status anime_status,
     reading_format reading_format,
     reading_status reading_status,
@@ -16,7 +16,7 @@ CREATE TABLE works (
 );
 
 -- Initial data - last updated on Jan 9, 2020
-INSERT INTO works (rank, titulo, anime_status, reading_status, reading_format, notes_status)
+INSERT INTO works (rank, title, anime_status, reading_status, reading_format, notes_status)
 VALUES
 (1, 'One Piece', 'ONGOING', 'ONGOING', 'MANGA', 'READING'),
 (2, 'Boku no Hero Academia', 'ONGOING', 'ONGOING', 'MANGA', 'READING'),

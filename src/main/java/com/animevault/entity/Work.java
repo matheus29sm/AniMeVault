@@ -18,7 +18,7 @@ public class Work {
 
     private Integer rank;
 
-    private String titulo;
+    private String title;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "anime_status")

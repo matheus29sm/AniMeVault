@@ -19,7 +19,7 @@ public class WorkController {
     @Autowired
     private WorkService workService;
 
-    @GetMapping("/buscar")
+    @GetMapping("/search")
     @Operation(summary = "Fetch the complete AniMeVault list",
             description = "Returns the full AniMeVault collection.")
     public ResponseEntity<ApiResponseDTO> searchWorks(){

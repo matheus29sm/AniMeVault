@@ -7,7 +7,7 @@ public class WorkRepositoryImpl {
                 SELECT
                     id,
                     rank,
-                    titulo,
+                    title,
                     anime_status AS animeStatus,
                     reading_format AS readingFormat,
                     reading_status AS readingStatus,

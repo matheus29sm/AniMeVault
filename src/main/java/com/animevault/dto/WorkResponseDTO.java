@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public class WorkResponseDTO {
 
     @Schema(description = "Work response model used in API output")
-    @JsonPropertyOrder({"id", "rank", "titulo", "animeStatus", "readingFormat", "readingStatus", "notesStatus"})
+    @JsonPropertyOrder({"id", "rank", "title", "animeStatus", "readingFormat", "readingStatus", "notesStatus"})
     public interface Work {
         @Schema(description = "Unique identifier of the work")
         Long getId();
@@ -19,7 +19,7 @@ public class WorkResponseDTO {
         Integer getRank();
 
         @Schema(description = "Title of the work")
-        String getTitulo();
+        String getTitle();
 
         @Schema(description = "Current anime status")
         AnimeStatus getAnimeStatus();
