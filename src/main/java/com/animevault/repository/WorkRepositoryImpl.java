@@ -15,4 +15,26 @@ public class WorkRepositoryImpl {
                 FROM works
             """;
 
+    public static final String REGISTER_NEW_WORK =
+            """
+                INSERT INTO works (
+                    id,
+                    rank,
+                    title,
+                    anime_status,
+                    reading_format,
+                    reading_status,
+                    notes_status
+                )
+                VALUES (
+                    nextval('works_id_seq'::regclass),
+                    currval('works_id_seq'::regclass),
+                    :title,
+                    :animeStatus,
+                    :readingFormat,
+                    :readingStatus,
+                    :notesStatus
+                );
+            """;
+
 }

@@ -2,16 +2,31 @@ package com.animevault.repository;
 
 import com.animevault.dto.WorkResponseDTO;
 import com.animevault.entity.Work;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
+import static com.animevault.repository.WorkRepositoryImpl.REGISTER_NEW_WORK;
 import static com.animevault.repository.WorkRepositoryImpl.SEARCH_WORKS;
 
 public interface WorkRepository extends JpaRepository<Work, Long> {
 
     @Query(value = SEARCH_WORKS, nativeQuery = true)
     List<WorkResponseDTO.Work> searchWorks();
+
+    @Transactional
+    @Modifying
+    @Query(value = REGISTER_NEW_WORK, nativeQuery = true)
+    int registerWork(
+            String title,
+            String animeStatus,
+            String readingFormat,
+            String readingStatus,
+            String notesStatus
+    );
+
 }
 
