@@ -3,6 +3,7 @@ package com.animevault.services;
 import com.animevault.dto.ApiResponseDTO;
 import com.animevault.dto.WorkRequestDTO;
 import com.animevault.dto.WorkResponseDTO;
+import com.animevault.exception.ServiceException;
 import com.animevault.repository.WorkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
 @Service
@@ -22,7 +25,6 @@ public class WorkServiceImpl implements WorkService{
 
     @Override
     public ResponseEntity<ApiResponseDTO> searchWorks() {
-        List<WorkResponseDTO.Work> response = workRepository.searchWorks();
         List<WorkResponseDTO.Work> response =
                 workRepository.searchWorks(null, null);
 
@@ -48,6 +50,53 @@ public class WorkServiceImpl implements WorkService{
                 "Work successfully registered into AniMeVault",
                 null,
                 LocalDateTime.now()));
+    }
+
+    @Override
+    public ResponseEntity<ApiResponseDTO> updateWork(Long rank,
+                                                     String title,
+                                                     WorkRequestDTO.UpdateWork updateWork) {
+        if (rank == null && title == null){
+            throw new ServiceException(BAD_REQUEST,
+                    "Either rank or title must be provided to update a work.");
+        }
+
+        List<WorkResponseDTO.Work> listWork =
+                workRepository.searchWorks(rank, title);
+
+        if (listWork.isEmpty()) {
+            throw new ServiceException(NOT_FOUND,
+                    "Work not found with the provided parameters.");
+        }
+
+        WorkResponseDTO.Work work = listWork.get(0);
+
+        if (updateWork.getAnimeStatus() == null) {
+            updateWork.setAnimeStatus(work.getAnimeStatus());
+        }
+        if (updateWork.getReadingFormat() == null) {
+            updateWork.setReadingFormat(work.getReadingFormat());
+        }
+        if (updateWork.getReadingStatus() == null) {
+            updateWork.setReadingStatus(work.getReadingStatus());
+        }
+        if (updateWork.getNotesStatus() == null) {
+            updateWork.setNotesStatus(work.getNotesStatus());
+        }
+
+        workRepository.updateWork(
+                rank,
+                title,
+                updateWork.getAnimeStatus().name(),
+                updateWork.getReadingFormat().name(),
+                updateWork.getReadingStatus().name(),
+                updateWork.getNotesStatus().name());
+
+        return ResponseEntity.status(OK).body(
+                new ApiResponseDTO(OK.value(),
+                        "Work successfully updated in AniMeVault",
+                        null,
+                        LocalDateTime.now()));
     }
 
 }

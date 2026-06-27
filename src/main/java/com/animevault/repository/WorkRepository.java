@@ -11,6 +11,7 @@ import java.util.List;
 
 import static com.animevault.repository.WorkRepositoryImpl.REGISTER_NEW_WORK;
 import static com.animevault.repository.WorkRepositoryImpl.SEARCH_WORKS;
+import static com.animevault.repository.WorkRepositoryImpl.UPDATE_WORK;
 
 public interface WorkRepository extends JpaRepository<Work, Long> {
 
@@ -30,5 +31,15 @@ public interface WorkRepository extends JpaRepository<Work, Long> {
             String notesStatus
     );
 
+    @Transactional
+    @Modifying
+    @Query(value = UPDATE_WORK, nativeQuery = true)
+    int updateWork(
+            Long rank,
+            String title,
+            String animeStatus,
+            String readingFormat,
+            String readingStatus,
+            String notesStatus);
 }
 

@@ -26,4 +26,19 @@ public class WorkRequestDTO {
         @Schema(description = "Notes or remarks status")
         private NotesStatus notesStatus;
     }
+
+    @Data
+    public static class UpdateWork{
+        @Schema(description = "Current anime status")
+        private AnimeStatus animeStatus;
+
+        @Schema(description = "Format of the reading material")
+        private ReadingFormat readingFormat;
+
+        @Schema(description = "Current reading status")
+        private ReadingStatus readingStatus;
+
+        @Schema(description = "Notes or remarks status")
+        private NotesStatus notesStatus;
+    }
 }

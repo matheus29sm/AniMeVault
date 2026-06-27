@@ -37,7 +37,19 @@ public class WorkRepositoryImpl {
                     :readingFormat,
                     :readingStatus,
                     :notesStatus
-                );
+                )
             """;
 
+    public static final String UPDATE_WORK =
+            """
+                UPDATE works
+                SET
+                	"anime_status" = :animeStatus,
+                	"reading_format" = :readingFormat,
+                	"reading_status" = :readingStatus,
+                	"notes_status" = :notesStatus
+                WHERE
+                	(:rank IS NULL OR rank = :rank)
+                	AND (:title IS NULL OR title = :title)
+            """;
 }

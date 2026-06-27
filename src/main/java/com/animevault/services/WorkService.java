@@ -9,4 +9,8 @@ public interface WorkService {
     ResponseEntity<ApiResponseDTO> searchWorks();
 
     ResponseEntity<ApiResponseDTO> registerWork(WorkRequestDTO.NewWork newWork);
+
+    ResponseEntity<ApiResponseDTO> updateWork(Long rank,
+                                              String title,
+                                              WorkRequestDTO.UpdateWork updateWork);
 }
