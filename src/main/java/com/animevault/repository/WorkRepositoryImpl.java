@@ -13,6 +13,9 @@ public class WorkRepositoryImpl {
                     reading_status AS readingStatus,
                     notes_status AS notesStatus
                 FROM works
+                WHERE
+                    (:rank IS NULL OR rank = :rank)
+                	AND (:title IS NULL OR title = :title)
             """;
 
     public static final String REGISTER_NEW_WORK =

@@ -23,6 +23,8 @@ public class WorkServiceImpl implements WorkService{
     @Override
     public ResponseEntity<ApiResponseDTO> searchWorks() {
         List<WorkResponseDTO.Work> response = workRepository.searchWorks();
+        List<WorkResponseDTO.Work> response =
+                workRepository.searchWorks(null, null);
 
         return ResponseEntity.status(OK).body(
                 new ApiResponseDTO(OK.value(),

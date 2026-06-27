@@ -15,7 +15,9 @@ import static com.animevault.repository.WorkRepositoryImpl.SEARCH_WORKS;
 public interface WorkRepository extends JpaRepository<Work, Long> {
 
     @Query(value = SEARCH_WORKS, nativeQuery = true)
-    List<WorkResponseDTO.Work> searchWorks();
+    List<WorkResponseDTO.Work> searchWorks(
+            Long rank,
+            String title);
 
     @Transactional
     @Modifying
