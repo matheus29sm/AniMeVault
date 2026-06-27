@@ -1,6 +1,5 @@
 package com.animevault.exception;
 
-import org.hibernate.service.spi.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -14,8 +13,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ServiceException.class)
     public ResponseEntity<ErrorResponse> handleServiceException(ServiceException exception) {
-        ErrorResponse erro = new ErrorResponse(HttpStatus.NOT_FOUND.value(), exception.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+        ErrorResponse error = new ErrorResponse(exception.getStatus().value(), exception.getMessage());
+        return ResponseEntity.status(exception.getStatus()).body(error);
     }
 
     @ExceptionHandler(Exception.class)
