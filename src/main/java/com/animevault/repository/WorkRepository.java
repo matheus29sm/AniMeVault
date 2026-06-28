@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
+import static com.animevault.repository.WorkRepositoryImpl.DEACTIVE_WORK;
 import static com.animevault.repository.WorkRepositoryImpl.REGISTER_NEW_WORK;
 import static com.animevault.repository.WorkRepositoryImpl.SEARCH_WORKS;
 import static com.animevault.repository.WorkRepositoryImpl.UPDATE_WORK;
@@ -41,5 +42,10 @@ public interface WorkRepository extends JpaRepository<Work, Long> {
             String readingFormat,
             String readingStatus,
             String notesStatus);
+
+    @Transactional
+    @Modifying
+    @Query(value = DEACTIVE_WORK, nativeQuery = true)
+    int deactivateWork(Long rank);
 }
 

@@ -13,4 +13,6 @@ public interface WorkService {
     ResponseEntity<ApiResponseDTO> updateWork(Long rank,
                                               String title,
                                               WorkRequestDTO.UpdateWork updateWork);
+
+    ResponseEntity<ApiResponseDTO> deactivateWork(Long rank);
 }

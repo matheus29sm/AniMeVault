@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -48,6 +49,14 @@ public class WorkController {
             @Parameter(description = "Title of the work") @RequestParam(required = false) String title,
             @RequestBody WorkRequestDTO.UpdateWork updateWork) {
         return workService.updateWork(rank, title, updateWork);
+    }
+
+    @DeleteMapping("/deactivate")
+    @Operation(summary = "Deactivate work",
+            description = "Soft delete: mark work as inactive in AniMeVault.")
+    public ResponseEntity<ApiResponseDTO> deactivateWork(
+            @Parameter(description = "Rank of the work") @RequestParam Long rank) {
+        return workService.deactivateWork(rank);
     }
 
 }

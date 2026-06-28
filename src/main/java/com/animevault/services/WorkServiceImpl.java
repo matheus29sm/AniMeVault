@@ -99,4 +99,17 @@ public class WorkServiceImpl implements WorkService{
                         LocalDateTime.now()));
     }
 
+    @Override
+    public ResponseEntity<ApiResponseDTO> deactivateWork(Long rank) {
+
+        workRepository.deactivateWork(rank);
+
+        return ResponseEntity.status(OK).body(
+                new ApiResponseDTO(
+                        OK.value(),
+                        "Work successfully deactivated in AniMeVault",
+                        null,
+                        LocalDateTime.now()));
+    }
+
 }

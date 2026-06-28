@@ -52,4 +52,12 @@ public class WorkRepositoryImpl {
                 	(:rank IS NULL OR rank = :rank)
                 	AND (:title IS NULL OR title = :title)
             """;
+
+    public static final String DEACTIVE_WORK =
+            """
+                UPDATE works
+                SET is_active = FALSE
+                WHERE rank = :rank
+            """;
+
 }

@@ -7,7 +7,7 @@ CREATE TYPE notes_status AS ENUM ('FINISHED', 'READING', 'NOT_READING', 'AUTHOR_
 -- Main table
 CREATE TABLE works (
     id SERIAL PRIMARY KEY,
-    rank INT,
+    rank INT UNIQUE,
     title VARCHAR(200) NOT NULL,
     anime_status anime_status,
     reading_format reading_format,
@@ -79,3 +79,6 @@ VALUES
 (59, 'Tokyo Ghoul', 'ENDED', 'ENDED', 'MANGA', 'NOT_WORTH'),
 (60, 'The Testament of Sister New Devil', 'ENDED', 'ONGOING', 'LIGHT_NOVEL', 'NOT_WORTH');
 
+-- Alter table to include soft delete flag
+ALTER TABLE works
+ADD COLUMN is_active BOOLEAN DEFAULT TRUE;
