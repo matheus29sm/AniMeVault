@@ -53,11 +53,17 @@ public class WorkRepositoryImpl {
                 	AND (:title IS NULL OR title = :title)
             """;
 
-    public static final String DEACTIVE_WORK =
+    public static final String DEACTIVATE_WORK =
             """
                 UPDATE works
                 SET is_active = FALSE
                 WHERE rank = :rank
             """;
 
+    public static final String ACTIVATE_WORK =
+            """
+                UPDATE works
+                SET is_active = TRUE
+                WHERE rank = :rank
+            """;
 }

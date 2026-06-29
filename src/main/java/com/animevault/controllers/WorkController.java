@@ -59,4 +59,13 @@ public class WorkController {
         return workService.deactivateWork(rank);
     }
 
+    @PutMapping("/activate")
+    @Operation(summary = "Activate work",
+            description = "Restore: mark work as active in AniMeVault.")
+    public ResponseEntity<ApiResponseDTO> activateWork(
+            @Parameter(description = "Rank of the work") @RequestParam Long rank) {
+
+        return workService.activateWork(rank);
+    }
+
 }
