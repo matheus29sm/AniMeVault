@@ -3,6 +3,8 @@ package com.animevault.repository;
 import com.animevault.dto.WorkResponseDTO;
 import com.animevault.entity.Work;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,10 +20,11 @@ import static com.animevault.repository.WorkRepositoryImpl.UPDATE_WORK;
 public interface WorkRepository extends JpaRepository<Work, Long> {
 
     @Query(value = SEARCH_WORKS, nativeQuery = true)
-    List<WorkResponseDTO.Work> searchWorks(
+    Page<WorkResponseDTO.Work> searchWorks(
             Long rank,
             String title,
-            boolean isActive);
+            boolean isActive,
+            Pageable pageable);
 
     @Transactional
     @Modifying

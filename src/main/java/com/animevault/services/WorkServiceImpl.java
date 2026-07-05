@@ -5,12 +5,16 @@ import com.animevault.dto.WorkRequestDTO;
 import com.animevault.dto.WorkResponseDTO;
 import com.animevault.exception.ServiceException;
 import com.animevault.repository.WorkRepository;
+import com.animevault.utils.PagedUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -23,20 +27,31 @@ public class WorkServiceImpl implements WorkService{
     @Autowired
     private WorkRepository workRepository;
 
+    @Autowired
+    private PagedUtil pagedUtil;
+
     @Override
     public ResponseEntity<ApiResponseDTO> searchWorks(Long rank,
                                                       String title,
-                                                      boolean isActive) {
-        List<WorkResponseDTO.Work> response =
+                                                      boolean isActive,
+                                                      Integer page,
+                                                      Integer size) {
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by("rank").ascending());
+
+        Page<WorkResponseDTO.Work> response =
                 workRepository.searchWorks(
                         rank,
                         title,
-                        isActive);
+                        isActive,
+                        pageable);
 
         return ResponseEntity.status(OK).body(
                 new ApiResponseDTO(OK.value(),
                 "List retrieved successfully",
-                response,
+                        pagedUtil.fromPage(response),
                 LocalDateTime.now()));
     }
 
@@ -66,15 +81,20 @@ public class WorkServiceImpl implements WorkService{
                     "Either rank or title must be provided to update a work.");
         }
 
-        List<WorkResponseDTO.Work> listWork =
-                workRepository.searchWorks(rank, title, true);
+        Pageable pageable = PageRequest.of(
+                0,
+                10,
+                Sort.by("rank").ascending());
+
+        Page<WorkResponseDTO.Work> listWork =
+                workRepository.searchWorks(rank, title, true, pageable);
 
         if (listWork.isEmpty()) {
             throw new ServiceException(NOT_FOUND,
                     "Work not found or is currently inactive with the provided parameters.");
         }
 
-        WorkResponseDTO.Work work = listWork.get(0);
+        WorkResponseDTO.Work work = listWork.stream().toList().get(0);
 
         if (updateWork.getAnimeStatus() == null) {
             updateWork.setAnimeStatus(work.getAnimeStatus());

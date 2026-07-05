@@ -8,7 +8,9 @@ public interface WorkService {
 
     ResponseEntity<ApiResponseDTO> searchWorks(Long rank,
                                                String title,
-                                               boolean isActive);
+                                               boolean isActive,
+                                               Integer page,
+                                               Integer size);
 
     ResponseEntity<ApiResponseDTO> registerWork(WorkRequestDTO.NewWork newWork);
 

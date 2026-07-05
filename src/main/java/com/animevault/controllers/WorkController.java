@@ -32,9 +32,11 @@ public class WorkController {
     public ResponseEntity<ApiResponseDTO> searchWorks(
             @Parameter(description = "Rank of the work") @RequestParam(required = false) Long rank,
             @Parameter(description = "Title of the work") @RequestParam(required = false) String title,
-            @Parameter(description = "") @RequestParam boolean isActive
+            @Parameter(description = "") @RequestParam boolean isActive,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size
     ){
-        return workService.searchWorks(rank, title, isActive);
+        return workService.searchWorks(rank, title, isActive, page, size);
     }
 
     @PostMapping("/register")
