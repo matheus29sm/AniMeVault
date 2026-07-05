@@ -1,5 +1,8 @@
 package com.animevault.exception;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Path;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -52,6 +55,29 @@ public class GlobalExceptionHandler {
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
                 String.format("Required request parameter '%s' is missing", paramName)
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponse> handleConstraintViolation(ConstraintViolationException ex) {
+        ConstraintViolation<?> violation = ex.getConstraintViolations().iterator().next();
+
+        String param = "";
+        for (Path.Node node : violation.getPropertyPath()) {
+            param = node.getName();
+        }
+
+        String message = String.format(
+                "Parameter '%s' has invalid value '%s' (%s)",
+                param,
+                violation.getInvalidValue(),
+                violation.getMessage()
+        );
+
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                message
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }

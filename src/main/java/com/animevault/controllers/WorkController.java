@@ -7,8 +7,11 @@ import com.animevault.services.WorkService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Validated
 @RequestMapping("/works")
 @Tag(name = "Works")
 public class WorkController {
@@ -33,8 +37,8 @@ public class WorkController {
             @Parameter(description = "Rank of the work") @RequestParam(required = false) Long rank,
             @Parameter(description = "Title of the work") @RequestParam(required = false) String title,
             @Parameter(description = "") @RequestParam boolean isActive,
-            @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "10") Integer size
+            @RequestParam(defaultValue = "0") @Min(0) Integer page,
+            @RequestParam(defaultValue = "10") @Min(1) @Max(100) Integer size
     ){
         return workService.searchWorks(rank, title, isActive, page, size);
     }
