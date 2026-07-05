@@ -24,9 +24,14 @@ public class WorkServiceImpl implements WorkService{
     private WorkRepository workRepository;
 
     @Override
-    public ResponseEntity<ApiResponseDTO> searchWorks() {
+    public ResponseEntity<ApiResponseDTO> searchWorks(Long rank,
+                                                      String title,
+                                                      boolean isActive) {
         List<WorkResponseDTO.Work> response =
-                workRepository.searchWorks(null, null);
+                workRepository.searchWorks(
+                        rank,
+                        title,
+                        isActive);
 
         return ResponseEntity.status(OK).body(
                 new ApiResponseDTO(OK.value(),
@@ -62,11 +67,11 @@ public class WorkServiceImpl implements WorkService{
         }
 
         List<WorkResponseDTO.Work> listWork =
-                workRepository.searchWorks(rank, title);
+                workRepository.searchWorks(rank, title, true);
 
         if (listWork.isEmpty()) {
             throw new ServiceException(NOT_FOUND,
-                    "Work not found with the provided parameters.");
+                    "Work not found or is currently inactive with the provided parameters.");
         }
 
         WorkResponseDTO.Work work = listWork.get(0);

@@ -5,17 +5,18 @@ public class WorkRepositoryImpl {
     public static final String SEARCH_WORKS  =
             """
                 SELECT
-                    id,
                     rank,
                     title,
                     anime_status AS animeStatus,
                     reading_format AS readingFormat,
                     reading_status AS readingStatus,
-                    notes_status AS notesStatus
+                    notes_status AS notesStatus,
+                    is_active AS isActive
                 FROM works
                 WHERE
                     (:rank IS NULL OR rank = :rank)
                 	AND (:title IS NULL OR title = :title)
+                	AND (:isActive IS NULL OR is_active = :isActive)
             """;
 
     public static final String REGISTER_NEW_WORK =

@@ -6,7 +6,9 @@ import org.springframework.http.ResponseEntity;
 
 public interface WorkService {
 
-    ResponseEntity<ApiResponseDTO> searchWorks();
+    ResponseEntity<ApiResponseDTO> searchWorks(Long rank,
+                                               String title,
+                                               boolean isActive);
 
     ResponseEntity<ApiResponseDTO> registerWork(WorkRequestDTO.NewWork newWork);
 

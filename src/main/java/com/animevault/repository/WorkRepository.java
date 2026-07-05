@@ -20,7 +20,8 @@ public interface WorkRepository extends JpaRepository<Work, Long> {
     @Query(value = SEARCH_WORKS, nativeQuery = true)
     List<WorkResponseDTO.Work> searchWorks(
             Long rank,
-            String title);
+            String title,
+            boolean isActive);
 
     @Transactional
     @Modifying

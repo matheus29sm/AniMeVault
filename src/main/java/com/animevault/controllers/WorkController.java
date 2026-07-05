@@ -29,8 +29,12 @@ public class WorkController {
     @GetMapping("/search")
     @Operation(summary = "Fetch the complete AniMeVault list",
             description = "Returns the full AniMeVault collection.")
-    public ResponseEntity<ApiResponseDTO> searchWorks(){
-        return workService.searchWorks();
+    public ResponseEntity<ApiResponseDTO> searchWorks(
+            @Parameter(description = "Rank of the work") @RequestParam(required = false) Long rank,
+            @Parameter(description = "Title of the work") @RequestParam(required = false) String title,
+            @Parameter(description = "") @RequestParam boolean isActive
+    ){
+        return workService.searchWorks(rank, title, isActive);
     }
 
     @PostMapping("/register")
