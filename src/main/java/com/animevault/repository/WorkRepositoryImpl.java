@@ -21,6 +21,9 @@ public class WorkRepositoryImpl {
 
     public static final String REGISTER_NEW_WORK =
             """
+                WITH new_row AS (
+                    SELECT nextval('works_id_seq') AS id
+                )
                 INSERT INTO works (
                     id,
                     rank,
@@ -30,15 +33,15 @@ public class WorkRepositoryImpl {
                     reading_status,
                     notes_status
                 )
-                VALUES (
-                    nextval('works_id_seq'::regclass),
-                    currval('works_id_seq'::regclass),
+                SELECT
+                    id,
+                    id,
                     :title,
                     :animeStatus,
                     :readingFormat,
                     :readingStatus,
                     :notesStatus
-                )
+                FROM new_row
             """;
 
     public static final String UPDATE_WORK =
