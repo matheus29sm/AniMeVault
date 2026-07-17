@@ -62,6 +62,7 @@ public class WorkServiceImpl implements WorkService{
                 newWork.getAnimeStatus().name(),
                 newWork.getReadingFormat().name(),
                 newWork.getReadingStatus().name(),
+                newWork.getUserStatus().name(),
                 newWork.getNotesStatus().name()
         );
 
@@ -105,6 +106,9 @@ public class WorkServiceImpl implements WorkService{
         if (updateWork.getReadingStatus() == null) {
             updateWork.setReadingStatus(work.getReadingStatus());
         }
+        if (updateWork.getUserStatus() == null){
+            updateWork.setUserStatus(work.getUserStatus());
+        }
         if (updateWork.getNotesStatus() == null) {
             updateWork.setNotesStatus(work.getNotesStatus());
         }
@@ -115,6 +119,7 @@ public class WorkServiceImpl implements WorkService{
                 updateWork.getAnimeStatus().name(),
                 updateWork.getReadingFormat().name(),
                 updateWork.getReadingStatus().name(),
+                updateWork.getUserStatus().name(),
                 updateWork.getNotesStatus().name());
 
         return ResponseEntity.status(OK).body(

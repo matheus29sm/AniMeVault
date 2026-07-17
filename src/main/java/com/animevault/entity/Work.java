@@ -4,6 +4,7 @@ import com.animevault.enums.AnimeStatus;
 import com.animevault.enums.NotesStatus;
 import com.animevault.enums.ReadingFormat;
 import com.animevault.enums.ReadingStatus;
+import com.animevault.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -35,5 +36,9 @@ public class Work {
     @Enumerated(EnumType.STRING)
     @Column(name = "notes_status")
     private NotesStatus notesStatus;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_reading_status")
+    private UserStatus userStatus;
 
 }

@@ -4,6 +4,7 @@ import com.animevault.enums.AnimeStatus;
 import com.animevault.enums.NotesStatus;
 import com.animevault.enums.ReadingFormat;
 import com.animevault.enums.ReadingStatus;
+import com.animevault.enums.UserStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -23,6 +24,9 @@ public class WorkRequestDTO {
         @Schema(description = "Current reading status")
         private ReadingStatus readingStatus;
 
+        @Schema(description = "Current user reading status")
+        private UserStatus userStatus;
+
         @Schema(description = "Notes or remarks status")
         private NotesStatus notesStatus;
     }
@@ -37,6 +41,9 @@ public class WorkRequestDTO {
 
         @Schema(description = "Current reading status")
         private ReadingStatus readingStatus;
+
+        @Schema(description = "Current user reading status")
+        private UserStatus userStatus;
 
         @Schema(description = "Notes or remarks status")
         private NotesStatus notesStatus;

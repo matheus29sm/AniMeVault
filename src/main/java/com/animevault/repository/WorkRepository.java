@@ -34,6 +34,7 @@ public interface WorkRepository extends JpaRepository<Work, Long> {
             String animeStatus,
             String readingFormat,
             String readingStatus,
+            String userStatus,
             String notesStatus
     );
 
@@ -46,6 +47,7 @@ public interface WorkRepository extends JpaRepository<Work, Long> {
             String animeStatus,
             String readingFormat,
             String readingStatus,
+            String userStatus,
             String notesStatus);
 
     @Transactional

@@ -10,6 +10,7 @@ public class WorkRepositoryImpl {
                     anime_status AS animeStatus,
                     reading_format AS readingFormat,
                     reading_status AS readingStatus,
+                    user_reading_status AS userStatus,
                     notes_status AS notesStatus,
                     is_active AS isActive
                 FROM works
@@ -31,6 +32,7 @@ public class WorkRepositoryImpl {
                     anime_status,
                     reading_format,
                     reading_status,
+                    user_reading_status,
                     notes_status
                 )
                 SELECT
@@ -40,6 +42,7 @@ public class WorkRepositoryImpl {
                     :animeStatus,
                     :readingFormat,
                     :readingStatus,
+                    :userStatus,
                     :notesStatus
                 FROM new_row
             """;
@@ -51,6 +54,7 @@ public class WorkRepositoryImpl {
                 	"anime_status" = :animeStatus,
                 	"reading_format" = :readingFormat,
                 	"reading_status" = :readingStatus,
+                	"user_reading_status" = :userStatus,
                 	"notes_status" = :notesStatus
                 WHERE
                 	(:rank IS NULL OR rank = :rank)
