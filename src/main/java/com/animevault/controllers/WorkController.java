@@ -7,6 +7,7 @@ import com.animevault.services.WorkService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class WorkController {
     @Operation(summary = "Register a new work",
             description = "Add a new work into the AniMeVault collection.")
     public ResponseEntity<ApiResponseDTO> registerWork(
-            @RequestBody WorkRequestDTO.NewWork newWork) {
+            @Valid @RequestBody WorkRequestDTO.NewWork newWork) {
         return workService.registerWork(newWork);
     }
 
