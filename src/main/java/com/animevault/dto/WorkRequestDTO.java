@@ -8,15 +8,12 @@ import com.animevault.enums.UserStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 public class WorkRequestDTO {
 
     @Data
-    public static class NewWork{
-        @NotNull(message = "title is required")
-        @Schema(description = "Title of the work")
-        private String title;
-
+    public static class BaseWork{
         @NotNull(message = "animeStatus is required")
         @Schema(description = "Current anime status")
         private AnimeStatus animeStatus;
@@ -38,21 +35,16 @@ public class WorkRequestDTO {
         private NotesStatus notesStatus;
     }
 
+    @EqualsAndHashCode(callSuper = true)
     @Data
-    public static class UpdateWork{
-        @Schema(description = "Current anime status")
-        private AnimeStatus animeStatus;
-
-        @Schema(description = "Format of the reading material")
-        private ReadingFormat readingFormat;
-
-        @Schema(description = "Current reading status")
-        private ReadingStatus readingStatus;
-
-        @Schema(description = "Current user reading status")
-        private UserStatus userStatus;
-
-        @Schema(description = "Notes or remarks status")
-        private NotesStatus notesStatus;
+    public static class NewWork extends BaseWork {
+        @NotNull(message = "title is required")
+        @Schema(description = "Title of the work")
+        private String title;
     }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    public static class UpdateWork extends BaseWork{}
+
 }
