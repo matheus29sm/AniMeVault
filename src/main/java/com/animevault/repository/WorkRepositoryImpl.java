@@ -9,7 +9,7 @@ public class WorkRepositoryImpl {
                     title,
                     anime_status AS animeStatus,
                     reading_format AS readingFormat,
-                    reading_status AS readingStatus,
+                    reading_format_status AS readingStatus,
                     user_reading_status AS userStatus,
                     notes_status AS notesStatus,
                     is_active AS isActive
@@ -31,7 +31,7 @@ public class WorkRepositoryImpl {
                     title,
                     anime_status,
                     reading_format,
-                    reading_status,
+                    reading_format_status,
                     user_reading_status,
                     notes_status
                 )
@@ -53,7 +53,7 @@ public class WorkRepositoryImpl {
                 SET
                 	"anime_status" = :animeStatus,
                 	"reading_format" = :readingFormat,
-                	"reading_status" = :readingStatus,
+                	"reading_format_status" = :readingStatus,
                 	"user_reading_status" = :userStatus,
                 	"notes_status" = :notesStatus
                 WHERE

@@ -30,7 +30,7 @@ public class Work {
     private ReadingFormat readingFormat;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "reading_status")
+    @Column(name = "reading_format_status")
     private ReadingStatus readingStatus;
 
     @Enumerated(EnumType.STRING)
