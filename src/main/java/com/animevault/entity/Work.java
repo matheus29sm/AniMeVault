@@ -17,7 +17,7 @@ public class Work {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer rank;
+    private Long rank;
 
     private String title;
 
