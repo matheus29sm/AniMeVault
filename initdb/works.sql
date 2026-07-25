@@ -80,14 +80,36 @@ VALUES
 (59, 'The Testament of Sister New Devil', 'ENDED', 'LIGHT_NOVEL', 'UNKNOWN', 'NOT_WORTH'),
 (60, 'Keppeki Danshi! Aoyama-kun', 'ENDED', 'MANGA', 'ENDED', 'NOT_WORTH');
 
--- Alter table to include soft delete flag
-ALTER TABLE works
-ADD COLUMN is_active BOOLEAN DEFAULT TRUE;
-
 -- Alter table to include status user reading
 CREATE TYPE user_reading_status AS ENUM ('NOT_STARTED', 'READING', 'PAUSED', 'DROPPED', 'FINISHED');
 ALTER TABLE works ADD COLUMN user_reading_status user_reading_status DEFAULT 'NOT_STARTED';
 
+-- Alter table to include soft delete flag
+ALTER TABLE works
+ADD COLUMN is_active BOOLEAN DEFAULT TRUE;
+
 -- Alter table to rename reading_status
 ALTER TYPE reading_status RENAME TO reading_format_status;
 ALTER TABLE works RENAME COLUMN reading_status TO reading_format_status;
+
+-- Update user reading status for titles currently being tracked
+UPDATE works
+SET user_reading_status = CASE title
+    WHEN 'One Piece' THEN 'PAUSED'
+    WHEN 'Naruto' THEN 'FINISHED'
+    WHEN 'Dragon Ball' THEN 'PAUSED'
+    WHEN 'Bleach' THEN 'FINISHED'
+    WHEN 'Black Clover' THEN 'FINISHED'
+    WHEN 'Boku no Hero Academia' THEN 'FINISHED'
+    WHEN 'Hunter x Hunter' THEN 'DROPPED'
+    WHEN 'One Punch-Man' THEN 'DROPPED'
+    WHEN 'Fairy Tail' THEN 'DROPPED'
+    WHEN 'Shingeki no Kyojin' THEN 'FINISHED'
+    WHEN 'Nanatsu no Taizai' THEN 'DROPPED'
+    WHEN 'Rosario + Vampire' THEN 'FINISHED'
+    WHEN 'Yakusoku no Neverland' THEN 'DROPPED'
+    ELSE user_reading_status
+END
+WHERE title IN ('One Piece', 'Naruto', 'Fairy Tail', 'Dragon Ball', 'Bleach', 'Black Clover',
+    'Boku no Hero Academia', 'Hunter x Hunter', 'One Punch-Man', 'Shingeki no Kyojin',
+     'Nanatsu no Taizai', 'Rosario + Vampire', 'Yakusoku no Neverland');
