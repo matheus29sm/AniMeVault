@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
@@ -131,6 +132,18 @@ public class WorkServiceImpl implements WorkService{
 
     @Override
     public ResponseEntity<ApiResponseDTO> deactivateWork(Long rank) {
+        Pageable pageable = PageRequest.of(
+                0,
+                10,
+                Sort.by("rank").ascending());
+
+        Page<WorkResponseDTO.Work> listWork =
+                workRepository.searchWorks(rank, null, true, pageable);
+
+        if (listWork.isEmpty()) {
+            throw new ServiceException(CONFLICT,
+                    "Work not found or is already inactive in AniMeVault.");
+        }
 
         workRepository.deactivateWork(rank);
 
@@ -143,6 +156,19 @@ public class WorkServiceImpl implements WorkService{
 
     @Override
     public ResponseEntity<ApiResponseDTO> activateWork(Long rank) {
+
+        Pageable pageable = PageRequest.of(
+                0,
+                10,
+                Sort.by("rank").ascending());
+
+        Page<WorkResponseDTO.Work> listWork =
+                workRepository.searchWorks(rank, null, false, pageable);
+
+        if (listWork.isEmpty()) {
+            throw new ServiceException(CONFLICT,
+                    "Work not found or is already active in AniMeVault.");
+        }
 
         workRepository.activateWork(rank);
 
