@@ -37,7 +37,8 @@ public class WorkController {
     public ResponseEntity<ApiResponseDTO> searchWorks(
             @Parameter(description = "Rank of the work") @RequestParam(required = false) Long rank,
             @Parameter(description = "Title of the work") @RequestParam(required = false) String title,
-            @Parameter(description = "") @RequestParam boolean isActive,
+            @Parameter(description = "Soft delete flag: true for active, false for inactive")
+                @RequestParam boolean isActive,
             @RequestParam(defaultValue = "0") @Min(0) Integer page,
             @RequestParam(defaultValue = "10") @Min(1) @Max(100) Integer size
     ){

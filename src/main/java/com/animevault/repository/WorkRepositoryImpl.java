@@ -17,7 +17,7 @@ public class WorkRepositoryImpl {
                 WHERE
                     (:rank IS NULL OR rank = :rank)
                 	AND (:title IS NULL OR title = :title)
-                	AND (:isActive IS NULL OR is_active = :isActive)
+                	AND is_active = :isActive
             """;
 
     public static final String REGISTER_NEW_WORK =
@@ -39,11 +39,11 @@ public class WorkRepositoryImpl {
                     id,
                     id,
                     :title,
-                    :animeStatus,
-                    :readingFormat,
-                    :readingStatus,
-                    :userStatus,
-                    :notesStatus
+                    CAST(:animeStatus AS anime_status),
+                    CAST(:readingFormat AS reading_format),
+                    CAST(:readingStatus AS reading_format_status),
+                    CAST(:userStatus AS user_reading_status),
+                    CAST(:notesStatus AS notes_status)
                 FROM new_row
             """;
 
@@ -51,11 +51,11 @@ public class WorkRepositoryImpl {
             """
                 UPDATE works
                 SET
-                	"anime_status" = :animeStatus,
-                	"reading_format" = :readingFormat,
-                	"reading_format_status" = :readingStatus,
-                	"user_reading_status" = :userStatus,
-                	"notes_status" = :notesStatus
+                	anime_status = CAST(:animeStatus AS anime_status),
+                    reading_format = CAST(:readingFormat AS reading_format),
+                    reading_format_status = CAST(:readingStatus AS reading_format_status),
+                    user_reading_status = CAST(:userStatus AS user_reading_status),
+                    notes_status = CAST(:notesStatus AS notes_status)
                 WHERE
                 	(:rank IS NULL OR rank = :rank)
                 	AND (:title IS NULL OR title = :title)
