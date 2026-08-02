@@ -33,16 +33,38 @@ public class WorkController {
 
     @GetMapping("/search")
     @Operation(summary = "Fetch the complete AniMeVault list",
-            description = "Returns the full AniMeVault collection.")
+            description = "Returns the AniMeVault collection filtered by the provided parameters")
     public ResponseEntity<ApiResponseDTO> searchWorks(
-            @Parameter(description = "Rank of the work") @RequestParam(required = false) Long rank,
-            @Parameter(description = "Title of the work") @RequestParam(required = false) String title,
+            @Parameter(description = "Filter by rank of the work")
+            @RequestParam(required = false) Long rank,
+            @Parameter(description = "Filter by title of the work")
+            @RequestParam(required = false) String title,
+            @Parameter(description = "Filter by anime status")
+            @RequestParam(required = false) String animeStatus,
+            @Parameter(description = "Filter by reading format")
+            @RequestParam(required = false) String readingFormat,
+            @Parameter(description = "Filter by reading format status")
+            @RequestParam(required = false) String readingStatus,
+            @Parameter(description = "Filter by user's personal reading status")
+            @RequestParam(required = false) String userStatus,
+            @Parameter(description = "Filter by notes status")
+            @RequestParam(required = false) String notesStatus,
             @Parameter(description = "Soft delete flag: true for active, false for inactive")
-                @RequestParam boolean isActive,
+            @RequestParam boolean isActive,
             @RequestParam(defaultValue = "0") @Min(0) Integer page,
             @RequestParam(defaultValue = "10") @Min(1) @Max(100) Integer size
-    ){
-        return workService.searchWorks(rank, title, isActive, page, size);
+    ) {
+        return workService.searchWorks(
+                rank,
+                title,
+                animeStatus,
+                readingFormat,
+                readingStatus,
+                userStatus,
+                notesStatus,
+                isActive,
+                page,
+                size);
     }
 
     @PostMapping("/register")

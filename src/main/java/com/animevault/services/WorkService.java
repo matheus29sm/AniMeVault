@@ -8,6 +8,11 @@ public interface WorkService {
 
     ResponseEntity<ApiResponseDTO> searchWorks(Long rank,
                                                String title,
+                                               String animeStatus,
+                                               String readingFormat,
+                                               String readingStatus,
+                                               String userStatus,
+                                               String notesStatus,
                                                boolean isActive,
                                                Integer page,
                                                Integer size);

@@ -22,6 +22,11 @@ public interface WorkRepository extends JpaRepository<Work, Long> {
     Page<WorkResponseDTO.Work> searchWorks(
             @Param("rank") Long rank,
             @Param("title") String title,
+            @Param("animeStatus") String animeStatus,
+            @Param("readingFormat") String readingFormat,
+            @Param("readingStatus") String readingStatus,
+            @Param("userStatus") String userStatus,
+            @Param("notesStatus") String notesStatus,
             @Param("isActive") boolean isActive,
             Pageable pageable);
 

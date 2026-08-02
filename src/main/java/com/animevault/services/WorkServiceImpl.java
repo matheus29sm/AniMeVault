@@ -34,6 +34,11 @@ public class WorkServiceImpl implements WorkService{
     @Override
     public ResponseEntity<ApiResponseDTO> searchWorks(Long rank,
                                                       String title,
+                                                      String animeStatus,
+                                                      String readingFormat,
+                                                      String readingStatus,
+                                                      String userStatus,
+                                                      String notesStatus,
                                                       boolean isActive,
                                                       Integer page,
                                                       Integer size) {
@@ -46,6 +51,11 @@ public class WorkServiceImpl implements WorkService{
                 workRepository.searchWorks(
                         rank,
                         title,
+                        animeStatus,
+                        readingFormat,
+                        readingStatus,
+                        userStatus,
+                        notesStatus,
                         isActive,
                         pageable);
 
@@ -89,7 +99,16 @@ public class WorkServiceImpl implements WorkService{
                 Sort.by("rank").ascending());
 
         Page<WorkResponseDTO.Work> listWork =
-                workRepository.searchWorks(rank, title, true, pageable);
+                workRepository.searchWorks(
+                        rank,
+                        title,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        true,
+                        pageable);
 
         if (listWork.isEmpty()) {
             throw new ServiceException(NOT_FOUND,
@@ -138,7 +157,16 @@ public class WorkServiceImpl implements WorkService{
                 Sort.by("rank").ascending());
 
         Page<WorkResponseDTO.Work> listWork =
-                workRepository.searchWorks(rank, null, true, pageable);
+                workRepository.searchWorks(
+                        rank,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        true,
+                        pageable);
 
         if (listWork.isEmpty()) {
             throw new ServiceException(CONFLICT,
@@ -163,7 +191,16 @@ public class WorkServiceImpl implements WorkService{
                 Sort.by("rank").ascending());
 
         Page<WorkResponseDTO.Work> listWork =
-                workRepository.searchWorks(rank, null, false, pageable);
+                workRepository.searchWorks(
+                        rank,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        false,
+                        pageable);
 
         if (listWork.isEmpty()) {
             throw new ServiceException(CONFLICT,

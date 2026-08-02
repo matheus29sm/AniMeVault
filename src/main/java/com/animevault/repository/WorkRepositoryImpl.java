@@ -17,6 +17,11 @@ public class WorkRepositoryImpl {
                 WHERE
                     (:rank IS NULL OR rank = :rank)
                 	AND (:title IS NULL OR title = :title)
+                	AND (:animeStatus IS NULL OR anime_status = CAST(:animeStatus AS anime_status))
+                    AND (:readingFormat IS NULL OR reading_format = CAST(:readingFormat AS reading_format))
+                    AND (:readingStatus IS NULL OR reading_format_status = CAST(:readingStatus AS reading_format_status))
+                    AND (:userStatus IS NULL OR user_reading_status = CAST(:userStatus AS user_reading_status))
+                    AND (:notesStatus IS NULL OR notes_status = CAST(:notesStatus AS notes_status))
                 	AND is_active = :isActive
             """;
 
