@@ -9,6 +9,7 @@ import com.animevault.enums.NotesStatus;
 import com.animevault.enums.ReadingFormat;
 import com.animevault.enums.ReadingStatus;
 import com.animevault.enums.UserStatus;
+import com.animevault.exception.ServiceException;
 import com.animevault.repository.WorkRepository;
 import com.animevault.services.WorkServiceImpl;
 import org.junit.jupiter.api.DisplayName;
@@ -28,9 +29,12 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @ExtendWith(MockitoExtension.class)
 class WorkServiceTest {
@@ -46,6 +50,9 @@ class WorkServiceTest {
 
     @Mock
     private WorkRequestDTO.NewWork newWork;
+
+    @Mock
+    private WorkRequestDTO.UpdateWork updateWork;
 
     @Nested
     @DisplayName("Search works")
@@ -147,6 +154,77 @@ class WorkServiceTest {
 
             assertEquals(201, response.getBody().getStatus());
             assertTrue(response.getBody().getMessage().contains("Work successfully registered"));
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Update work")
+    class UpdateWork {
+
+        private final Pageable PAGEABLE = PageRequest.of(0, 10,
+                Sort.by("rank").ascending());
+        private final boolean IS_ACTIVE = true;
+
+        @Test
+        @DisplayName("Should update work successfully")
+        void shouldUpdateWorkSuccessfully() {
+            Long rank = 1L;
+
+            when(workRepository.searchWorks(rank, null, null,
+                    null, null, null,
+                    null, IS_ACTIVE, PAGEABLE))
+                    .thenReturn(new PageImpl<>(List.of(work)));
+
+            when(updateWork.getAnimeStatus()).thenReturn(AnimeStatus.ONGOING);
+            when(updateWork.getReadingFormat()).thenReturn(ReadingFormat.MANGA);
+            when(updateWork.getReadingStatus()).thenReturn(ReadingStatus.ONGOING);
+            when(updateWork.getUserStatus()).thenReturn(UserStatus.NOT_STARTED);
+            when(updateWork.getNotesStatus()).thenReturn(NotesStatus.NOT_READING);
+
+            ResponseEntity<ApiResponseDTO> response = workService.updateWork(1L, null, updateWork);
+
+            verify(workRepository).updateWork(
+                    rank,
+                    null,
+                    AnimeStatus.ONGOING.name(),
+                    ReadingFormat.MANGA.name(),
+                    ReadingStatus.ONGOING.name(),
+                    UserStatus.NOT_STARTED.name(),
+                    NotesStatus.NOT_READING.name()
+            );
+
+            assertEquals(200, response.getBody().getStatus());
+            assertTrue(response.getBody().getMessage().contains("Work successfully updated in AniMeVault"));
+        }
+
+        @Test
+        @DisplayName("Should throw exception when neither rank nor title is provided")
+        void shouldThrowExceptionWhenNeitherRankNorTitleIsProvided() {
+            ServiceException exception = assertThrows(ServiceException.class,
+                    () -> workService.updateWork(null, null, updateWork));
+
+            assertEquals(BAD_REQUEST, exception.getStatus());
+            assertEquals("Either rank or title must be provided to update a work.",
+                    exception.getMessage());
+        }
+
+        @Test
+        @DisplayName("Should throw exception when work not found")
+        void shouldThrowExceptionWhenWorkNotFound() {
+            Long rank = 0L;
+
+            when(workRepository.searchWorks(rank, null, null,
+                    null, null, null,
+                    null, IS_ACTIVE, PAGEABLE))
+                    .thenReturn(new PageImpl<>(List.of()));
+
+            ServiceException exception = assertThrows(ServiceException.class,
+                    () -> workService.updateWork(rank, null, updateWork));
+
+            assertEquals(NOT_FOUND, exception.getStatus());
+            assertEquals("Work not found or is currently inactive with the provided parameters.",
+                    exception.getMessage());
         }
 
     }
