@@ -34,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @ExtendWith(MockitoExtension.class)
@@ -227,6 +228,97 @@ class WorkServiceTest {
                     exception.getMessage());
         }
 
+    }
+
+    @Nested
+    @DisplayName("Deactivate work")
+    class DeactivateWork {
+
+        private final Pageable PAGEABLE = PageRequest.of(0, 10,
+                Sort.by("rank").ascending());
+        private final boolean IS_ACTIVE = true;
+
+        @Test
+        @DisplayName("Should deactivate work successfully")
+        void shouldDeactivateWorkSuccessfully() {
+            Long rank = 1L;
+
+            when(workRepository.searchWorks(rank, null, null,
+                    null, null, null,
+                    null, IS_ACTIVE, PAGEABLE))
+                    .thenReturn(new PageImpl<>(List.of(work)));
+
+            ResponseEntity<ApiResponseDTO> response = workService.deactivateWork(rank);
+
+            verify(workRepository).deactivateWork(rank);
+
+            assertEquals(200, response.getBody().getStatus());
+            assertTrue(response.getBody().getMessage().contains("Work successfully deactivated in AniMeVault"));
+        }
+
+        @Test
+        @DisplayName("Should throw ConflictException when work already inactive")
+        void shouldThrowConflictExceptionWhenWorkAlreadyInactive() {
+            Long rank = 0L;
+
+            when(workRepository.searchWorks(rank, null, null,
+                    null, null, null,
+                    null, IS_ACTIVE, PAGEABLE))
+                    .thenReturn(new PageImpl<>(List.of()));
+
+            ServiceException exception = assertThrows(ServiceException.class,
+                    () -> workService.deactivateWork(rank));
+
+            assertEquals(CONFLICT, exception.getStatus());
+            assertEquals("Work not found or is already inactive in AniMeVault.",
+                    exception.getMessage());
+        }
+    }
+
+    @Nested
+    @DisplayName("Activate work")
+    class ActivateWork {
+
+
+        private final Pageable PAGEABLE = PageRequest.of(0, 10,
+                Sort.by("rank").ascending());
+        private final boolean IS_ACTIVE = false;
+
+        @Test
+        @DisplayName("Should activate work successfully")
+        void shouldActivateWorkSuccessfully() {
+            Long rank = 1L;
+
+            when(workRepository.searchWorks(rank, null, null,
+                    null, null, null,
+                    null, IS_ACTIVE, PAGEABLE))
+                    .thenReturn(new PageImpl<>(List.of(work)));
+
+            ResponseEntity<ApiResponseDTO> response = workService.activateWork(rank);
+
+            verify(workRepository).activateWork(rank);
+
+            assertEquals(200, response.getBody().getStatus());
+            assertTrue(response.getBody().getMessage().contains("Work successfully activated in AniMeVault"));
+        }
+
+        @Test
+        @DisplayName("Should throw ConflictException when work already active")
+        void shouldThrowConflictExceptionWhenWorkAlreadyActive() {
+            Long rank = 0L;
+
+            when(workRepository.searchWorks(rank, null, null,
+                    null, null, null,
+                    null, IS_ACTIVE, PAGEABLE))
+                    .thenReturn(new PageImpl<>(List.of()));
+
+            ServiceException exception = assertThrows(ServiceException.class,
+                    () -> workService.activateWork(rank));
+
+            assertEquals(CONFLICT, exception.getStatus());
+            assertEquals("Work not found or is already active in AniMeVault.",
+                    exception.getMessage());
+        }
     }
 
 }
