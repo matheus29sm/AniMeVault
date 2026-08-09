@@ -20,6 +20,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
 @Service
@@ -58,6 +59,14 @@ public class WorkServiceImpl implements WorkService{
                         notesStatus,
                         isActive,
                         pageable);
+
+        if (response.isEmpty()){
+            return ResponseEntity.status(NO_CONTENT).body(
+                    new ApiResponseDTO(NO_CONTENT.value(),
+                            "No works found for provided filters",
+                            pagedUtil.fromPage(response),
+                            LocalDateTime.now()));
+        }
 
         return ResponseEntity.status(OK).body(
                 new ApiResponseDTO(OK.value(),
