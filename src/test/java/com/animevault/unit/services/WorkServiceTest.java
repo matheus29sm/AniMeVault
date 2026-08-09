@@ -4,6 +4,11 @@ import com.animevault.dto.ApiResponseDTO;
 import com.animevault.dto.PagedResponse;
 import com.animevault.dto.WorkRequestDTO;
 import com.animevault.dto.WorkResponseDTO;
+import com.animevault.enums.AnimeStatus;
+import com.animevault.enums.NotesStatus;
+import com.animevault.enums.ReadingFormat;
+import com.animevault.enums.ReadingStatus;
+import com.animevault.enums.UserStatus;
 import com.animevault.repository.WorkRepository;
 import com.animevault.services.WorkServiceImpl;
 import org.junit.jupiter.api.DisplayName;
@@ -38,6 +43,9 @@ class WorkServiceTest {
 
     @Mock
     private WorkResponseDTO.Work work;
+
+    @Mock
+    private WorkRequestDTO.NewWork newWork;
 
     @Nested
     @DisplayName("Search works")
@@ -106,6 +114,39 @@ class WorkServiceTest {
             assertEquals(204, response.getBody().getStatus());
             assertTrue(response.getBody().getMessage().contains("No works found for provided filters"));
             assertTrue(actualPaged.getContent().isEmpty());
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Register work")
+    class RegisterWork {
+
+        @Test
+        @DisplayName("Should register work successfully")
+        void shouldRegisterWorkSuccessfully() {
+            String title = "NewWork";
+
+            when(newWork.getTitle()).thenReturn(title);
+            when(newWork.getAnimeStatus()).thenReturn(AnimeStatus.ONGOING);
+            when(newWork.getReadingFormat()).thenReturn(ReadingFormat.MANGA);
+            when(newWork.getReadingStatus()).thenReturn(ReadingStatus.ONGOING);
+            when(newWork.getUserStatus()).thenReturn(UserStatus.NOT_STARTED);
+            when(newWork.getNotesStatus()).thenReturn(NotesStatus.NOT_READING);
+
+            ResponseEntity<ApiResponseDTO> response = workService.registerWork(newWork);
+
+            verify(workRepository).registerWork(
+                    title,
+                    AnimeStatus.ONGOING.name(),
+                    ReadingFormat.MANGA.name(),
+                    ReadingStatus.ONGOING.name(),
+                    UserStatus.NOT_STARTED.name(),
+                    NotesStatus.NOT_READING.name()
+            );
+
+            assertEquals(201, response.getBody().getStatus());
+            assertTrue(response.getBody().getMessage().contains("Work successfully registered"));
         }
 
     }
