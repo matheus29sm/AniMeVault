@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -232,6 +233,65 @@ class WorkIntegrationTest {
                             "notesStatus": null
                         }""", "notesStatus")
             );
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Update work")
+    class UpdateWork {
+
+        @Test
+        @DisplayName("Should update work successfully")
+        @Sql("/sql/works-active.sql")
+        void shouldUpdateWorkSuccessfully() throws Exception {
+            String request = """
+                {
+                    "userStatus": "PAUSED"
+                }""";
+
+            mockMvc.perform(put("/works/update")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .param("title", "TESTE INTEGRAT")
+                            .content(request))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status")
+                            .value(200))
+                    .andExpect(jsonPath("$.message")
+                            .value("Work successfully updated in AniMeVault"));
+        }
+
+        @Test
+        @DisplayName("Should return bad request when request body is empty")
+        @Sql("/sql/works-active.sql")
+        void shouldReturnBadRequestWhenRequestBodyIsEmpty() throws Exception {
+            mockMvc.perform(put("/works/update")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .param("title", "TESTE INTEGRAT")
+                            .content(""))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.status").value(400))
+                    .andExpect(jsonPath("$.message")
+                            .value("The request body is invalid or empty"));
+        }
+
+        @Test
+        @DisplayName("Should return bad request when request body is malformed")
+        @Sql("/sql/works-active.sql")
+        void shouldReturnBadRequestWhenRequestBodyIsMalformed() throws Exception {
+            String malformedRequest = """
+                {
+                    "userStatus": "ONGOING"
+                }""";
+
+            mockMvc.perform(put("/works/update")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .param("title", "TESTE INTEGRAT")
+                            .content(malformedRequest))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.status").value(400))
+                    .andExpect(jsonPath("$.message")
+                            .value("The request body is invalid or empty"));
         }
 
     }
