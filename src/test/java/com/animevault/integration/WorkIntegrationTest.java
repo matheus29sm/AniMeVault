@@ -20,6 +20,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.stream.Stream;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -294,6 +295,61 @@ class WorkIntegrationTest {
                             .value("The request body is invalid or empty"));
         }
 
+    }
+
+    @Nested
+    @DisplayName("Deactivate work")
+    class DeactivateWork {
+
+        @Test
+        @DisplayName("Should deactivate work successfully")
+        @Sql("/sql/works-active.sql")
+        void shouldDeactivateWorkSuccessfully() throws Exception {
+            mockMvc.perform(delete("/works/deactivate")
+                            .param("rank", "9999999"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(200))
+                    .andExpect(jsonPath("$.message")
+                            .value("Work successfully deactivated in AniMeVault"));
+        }
+
+        @Test
+        @DisplayName("Should return bad request when rank parameter is missing")
+        void shouldReturnBadRequestWhenRankIsMissing() throws Exception {
+            mockMvc.perform(delete("/works/deactivate"))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.status").value(400))
+                    .andExpect(jsonPath("$.message")
+                            .value("Required request parameter 'rank' is missing"));
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Activate work")
+    class ActivateWork {
+
+        @Test
+        @DisplayName("Should activate work successfully")
+        @Sql("/sql/works-inactive.sql")
+        void shouldActivateWorkSuccessfully() throws Exception {
+            mockMvc.perform(put("/works/activate")
+                            .param("rank", "9999999"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(200))
+                    .andExpect(jsonPath("$.message")
+                            .value("Work successfully activated in AniMeVault"));
+        }
+
+        @Test
+        @DisplayName("Should return bad request when rank parameter is missing")
+        void shouldReturnBadRequestWhenRankIsMissing() throws Exception {
+            mockMvc.perform(put("/works/activate"))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.status").value(400))
+                    .andExpect(jsonPath("$.message")
+                            .value("Required request parameter 'rank' is missing"));
+        }
     }
 
 }

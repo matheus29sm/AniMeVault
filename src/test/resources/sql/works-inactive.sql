@@ -14,7 +14,7 @@ INSERT INTO works (
 )
 SELECT
     id,
-    id,
+    9999999,
     'TESTE INTEGRAT INACTIVE',
     'ONGOING',
     'MANGA',
