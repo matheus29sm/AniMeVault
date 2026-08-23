@@ -183,7 +183,7 @@ class WorkServiceTest {
             when(updateWork.getUserStatus()).thenReturn(UserStatus.NOT_STARTED);
             when(updateWork.getNotesStatus()).thenReturn(NotesStatus.NOT_READING);
 
-            ResponseEntity<ApiResponseDTO> response = workService.updateWork(1L, null, updateWork);
+            ResponseEntity<ApiResponseDTO> response = workService.updateWork(rank, null, updateWork);
 
             verify(workRepository).updateWork(
                     rank,
@@ -225,6 +225,21 @@ class WorkServiceTest {
 
             assertEquals(NOT_FOUND, exception.getStatus());
             assertEquals("Work not found or is currently inactive with the provided parameters.",
+                    exception.getMessage());
+        }
+
+        @Test
+        @DisplayName("Should throw exception when no fields are provided to update")
+        void shouldThrowExceptionWhenNoFieldsProvided() {
+            Long rank = 1L;
+
+            when(updateWork.isEmpty()).thenReturn(true);
+
+            ServiceException exception = assertThrows(ServiceException.class,
+                    () -> workService.updateWork(rank, null, updateWork));
+
+            assertEquals(BAD_REQUEST, exception.getStatus());
+            assertEquals("At least one field must be provided to update a work.",
                     exception.getMessage());
         }
 

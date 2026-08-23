@@ -102,6 +102,11 @@ public class WorkServiceImpl implements WorkService{
                     "Either rank or title must be provided to update a work.");
         }
 
+        if (updateWork.isEmpty()) {
+            throw new ServiceException(BAD_REQUEST,
+                    "At least one field must be provided to update a work.");
+        }
+
         Pageable pageable = PageRequest.of(
                 0,
                 10,

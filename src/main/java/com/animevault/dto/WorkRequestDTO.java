@@ -45,6 +45,14 @@ public class WorkRequestDTO {
 
     @EqualsAndHashCode(callSuper = true)
     @Data
-    public static class UpdateWork extends BaseWork{}
+    public static class UpdateWork extends BaseWork{
+        public boolean isEmpty() {
+            return getAnimeStatus() == null
+                    && getReadingFormat() == null
+                    && getReadingStatus() == null
+                    && getUserStatus() == null
+                    && getNotesStatus() == null;
+        }
+    }
 
 }
